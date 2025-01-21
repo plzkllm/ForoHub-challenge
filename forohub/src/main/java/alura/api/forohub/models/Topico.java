@@ -1,22 +1,42 @@
 package alura.api.forohub.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.validation.Valid;
+
 import java.util.Date;
 
+@Entity
 public class Topico {
+    @Id
     private Long id;
     private String titulo;
     private String mensaje;
     private Date fechaDeCreacion;
-    private String status;
+    private boolean status;
     private String autor;
-    private String curso;
+    private String nombreCurso;
+
+    public Topico(DatosTopico datosTopico) {
+        this.titulo= datosTopico.titulo();
+        this.mensaje= datosTopico.mensaje();;
+        this.fechaDeCreacion=datosTopico.fechaDeCreacion();
+        this.status=true;
+        this.autor= datosTopico.autor();
+        this.nombreCurso= datosTopico.curso();
+
+    }
+
+    public String getNombreCurso() {
+        return nombreCurso;
+    }
+
+    public void setNombreCurso(String nombreCurso) {
+        this.nombreCurso = nombreCurso;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitulo() {
@@ -43,11 +63,11 @@ public class Topico {
         this.mensaje = mensaje;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -59,11 +79,4 @@ public class Topico {
         this.autor = autor;
     }
 
-    public String getCurso() {
-        return curso;
-    }
-
-    public void setCurso(String curso) {
-        this.curso = curso;
-    }
 }
