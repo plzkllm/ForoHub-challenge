@@ -9,11 +9,12 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.net.URI;
 
 @RestController
@@ -24,12 +25,15 @@ public class TopicoController {
     private TopicoRepository topicoRepository;
 
     @GetMapping
-    public ResponseEntity<Page<DatosTopicoParaImpresion>> listarTopicos(Pageable pagina){
-        return ResponseEntity.ok(topicoRepository.findByStatusTrue(pagina).map(DatosTopicoParaImpresion::new));
+    public ResponseEntity<Page<DatosTopicoParaImpresion>> listarTopicos(@PageableDefault(size = 5) Pageable pagina){
+        return ResponseEntity
+                .ok(topicoRepository
+                        .findByStatusTrue(pagina)
+                        .map(DatosTopicoParaImpresion::new));
     }
 
     @PostMapping
-    public ResponseEntity<DatosTopicoParaImpresion> insertarTopico(@RequestBody @Valid DatosTopico datosTopico,UriComponentsBuilder uri){
+    public ResponseEntity<DatosTopicoParaImpresion> insertarTopico(@RequestBody @Valid DatosTopico datosTopico, UriComponentsBuilder uri){
         Topico topico = new Topico(datosTopico);
         DatosTopicoParaImpresion datosAImprimir = new DatosTopicoParaImpresion(topico.getId(),
                 topico.getTitulo(),topico.getMensaje(),
