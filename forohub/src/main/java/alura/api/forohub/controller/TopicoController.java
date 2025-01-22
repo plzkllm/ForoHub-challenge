@@ -1,5 +1,6 @@
 package alura.api.forohub.controller;
 
+import alura.api.forohub.models.DatosActualizarTopico;
 import alura.api.forohub.models.DatosTopico;
 import alura.api.forohub.models.DatosTopicoParaImpresion;
 import alura.api.forohub.models.Topico;
@@ -7,10 +8,12 @@ import alura.api.forohub.repository.TopicoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.awt.print.Pageable;
 import java.net.URI;
 
 @RestController
@@ -21,9 +24,8 @@ public class TopicoController {
     private TopicoRepository topicoRepository;
 
     @GetMapping
-    public ResponseEntity<DatosTopico> listarTopicos(){
-
-        return ResponseEntity.ok(topicoRepository.findByActivoTrue(paginacion).map(DatosTopico::new));
+    public ResponseEntity<Page<DatosTopicoParaImpresion>> listarTopicos(Pageable pagina){
+        return ResponseEntity.ok(topicoRepository.findByStatusTrue(pagina).map(DatosTopicoParaImpresion::new));
     }
 
     @PostMapping
@@ -34,21 +36,26 @@ public class TopicoController {
                 topico.getFechaDeCreacion().toString(),
                 topico.getAutor(),topico.getNombreCurso());
 
-        URI url= uri.path("/medicos/{id}").buildAndExpand(datosTopico.id()).toUri();
+        URI url= uri.path("/topicos/{id}").buildAndExpand(datosTopico.id()).toUri();
         return ResponseEntity.created(url).body(datosAImprimir);
     }
 
     @PutMapping
     @Transactional
-    public String actualizarTopico(@RequestBody @Valid DatosTopico datosTopico){
-    //titulo
-        //mensaje
+    public ResponseEntity actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosTopico){
+        Topico topico = topicoRepository.getReferenceById(datosTopico.id());
+        topico.modificacion(datosTopico);
+        //titulo
+        // mensaje
         //nombreCurso
+        return ResponseEntity.ok(new DatosTopicoParaImpresion(topico));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public String eliminarTopico(@PathVariable Long id){
-
+    public ResponseEntity eliminarTopico(@PathVariable Long id){
+        Topico topico = topicoRepository.getReferenceById(id);
+        topico.eliminarTopico(); //borrado logico
+        return ResponseEntity.noContent().build();
     }
 }

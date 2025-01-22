@@ -79,4 +79,19 @@ public class Topico {
         this.autor = autor;
     }
 
+    public void modificacion(DatosActualizarTopico datosTopico) {
+        if(datosTopico.curso() != null){
+            this.nombreCurso= datosTopico.curso();
+        }
+        if(datosTopico.mensaje()!= null){
+            this.mensaje= datosTopico.mensaje();
+        }
+        if(datosTopico.titulo()!=null){
+            this.titulo= datosTopico.titulo();
+        }
+    }
+
+    public void eliminarTopico(){
+        this.status=false;
+    }
 }
