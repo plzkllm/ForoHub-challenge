@@ -1,13 +1,14 @@
 package alura.api.forohub.models;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
 public record DatosTopico(
-        Long id,
+        @NotNull Long id,
         String titulo,
         String mensaje,
-        Date fechaDeCreacion,
-        String status,
+        @NotNull String status,
         String autor,
         String curso
 ) {

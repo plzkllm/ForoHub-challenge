@@ -20,7 +20,7 @@ public class Topico {
     private Long id;
     private String titulo;
     private String mensaje;
-    private Date fechaDeCreacion;
+    private String fechaDeCreacion;
     private boolean status;
     private String autor;
     private String nombreCurso;
@@ -28,7 +28,7 @@ public class Topico {
     public Topico(DatosTopico datosTopico) {
         this.titulo= datosTopico.titulo();
         this.mensaje= datosTopico.mensaje();;
-        this.fechaDeCreacion=datosTopico.fechaDeCreacion();
+        this.fechaDeCreacion=new Date().toString();
         this.status=true;
         this.autor= datosTopico.autor();
         this.nombreCurso= datosTopico.curso();
@@ -55,12 +55,8 @@ public class Topico {
         this.titulo = titulo;
     }
 
-    public Date getFechaDeCreacion() {
+    public String getFechaDeCreacion() {
         return fechaDeCreacion;
-    }
-
-    public void setFechaDeCreacion(Date fechaDeCreacion) {
-        this.fechaDeCreacion = fechaDeCreacion;
     }
 
     public String getMensaje() {

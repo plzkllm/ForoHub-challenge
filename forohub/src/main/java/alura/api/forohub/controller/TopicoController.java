@@ -26,6 +26,7 @@ public class TopicoController {
 
     @GetMapping
     public ResponseEntity<Page<DatosTopicoParaImpresion>> listarTopicos(@PageableDefault(size = 5) Pageable pagina){
+        System.out.println("Funciona pero no hay datos");
         return ResponseEntity
                 .ok(topicoRepository
                         .findByStatusTrue(pagina)
